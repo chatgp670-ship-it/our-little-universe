@@ -2,319 +2,332 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050507">
-<title>Hello, Martina.</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#070812">
+<title>Hello, Martina — Our Little Universe</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
-
 :root{
-  --bg:#050507;
-  --fg:#f5f2ed;
-  --muted:#96929b;
-  --line:rgba(255,255,255,.12);
-  --glass:rgba(255,255,255,.045);
-  --ease:cubic-bezier(.16,1,.3,1);
+  --bg:#070812;
+  --bg2:#0d1020;
+  --text:#f5f3ff;
+  --muted:#a9adc4;
+  --line:rgba(255,255,255,.10);
+  --glass:rgba(255,255,255,.055);
+  --accent:#b9a7ff;
+  --accent2:#7ddcff;
+  --radius:26px;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 
 html,body{
+  margin:0;
   width:100%;
-  height:100%;
+  min-height:100%;
   background:var(--bg);
-  color:var(--fg);
-  font-family:"DM Sans",sans-serif;
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 body{
   overflow:hidden;
 }
 
-/* ATMOSPHERE */
-
-body:before{
-  content:"";
-  position:fixed;
-  inset:-30%;
-  z-index:-5;
-  background:
-    radial-gradient(circle at 25% 20%,rgba(130,83,190,.19),transparent 25%),
-    radial-gradient(circle at 80% 75%,rgba(55,100,180,.13),transparent 28%),
-    radial-gradient(circle at 50% 45%,rgba(255,255,255,.035),transparent 20%);
-  filter:blur(65px);
-  animation:ambient 18s ease-in-out infinite alternate;
+button{
+  font:inherit;
 }
 
-@keyframes ambient{
-  to{transform:scale(1.12) translate(2%,-2%) rotate(3deg)}
-}
-
-body:after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:999;
-  opacity:.035;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* PROGRESS */
-
-.progress{
+#progress{
   position:fixed;
   top:0;
   left:0;
-  width:100%;
+  width:0%;
   height:2px;
-  background:rgba(255,255,255,.07);
-  z-index:200;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  z-index:100;
+  transition:.7s ease;
 }
 
-.progress span{
-  display:block;
-  width:0;
-  height:100%;
-  background:#fff;
-  box-shadow:0 0 18px rgba(255,255,255,.5);
-  transition:width 1s var(--ease);
-}
-
-/* NAV */
-
-.nav{
-  position:fixed;
-  top:23px;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(91%,1100px);
-  z-index:150;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  color:#77747b;
-  font-size:9px;
-  letter-spacing:.28em;
-  text-transform:uppercase;
-}
-
-.nav strong{
-  color:#fff;
-  font-weight:500;
-}
-
-/* SCENES */
-
-.scene{
+.noise{
   position:fixed;
   inset:0;
-  padding:90px 22px 45px;
+  pointer-events:none;
+  opacity:.035;
+  z-index:20;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+.scene{
+  position:absolute;
+  inset:0;
+  min-height:100svh;
   display:grid;
   place-items:center;
+  padding:34px 20px;
   opacity:0;
-  visibility:hidden;
-  transform:scale(1.035);
-  transition:
-    opacity 1s var(--ease),
-    transform 1.2s var(--ease),
-    visibility 1s;
+  pointer-events:none;
+  transform:scale(.985);
+  transition:opacity .65s ease,transform .8s ease;
   overflow:auto;
 }
 
 .scene.active{
   opacity:1;
-  visibility:visible;
+  pointer-events:auto;
   transform:scale(1);
 }
 
-.content{
-  width:min(1100px,100%);
-  position:relative;
-  z-index:5;
-  text-align:center;
-}
-
-.eyebrow{
-  font-size:9px;
-  letter-spacing:.34em;
-  text-transform:uppercase;
-  color:#89858e;
-  margin-bottom:23px;
-}
-
-h1,h2{
-  font-family:"Playfair Display",serif;
-  font-weight:400;
-  letter-spacing:-.06em;
-}
-
-h1{
-  font-size:clamp(68px,16vw,175px);
-  line-height:.82;
-}
-
-h2{
-  font-size:clamp(42px,8vw,88px);
-  line-height:.92;
-}
-
-p{
-  max-width:600px;
-  margin:23px auto 0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.9;
-}
-
-/* BUTTON */
-
-.btn{
-  margin-top:32px;
-  padding:14px 23px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  font:inherit;
-  font-size:9px;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  cursor:pointer;
-  backdrop-filter:blur(18px);
-  transition:.4s var(--ease);
-}
-
-.btn:hover{
-  background:#fff;
-  color:#050507;
-  transform:translateY(-4px);
-  box-shadow:0 20px 55px rgba(255,255,255,.13);
-}
-
-.btn:disabled{
-  opacity:.3;
+.bg{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
   pointer-events:none;
 }
 
-/* =====================
-   OPENING
-===================== */
-
-#opening{
-  background:
-    radial-gradient(circle at 50% 43%,rgba(163,116,242,.13),transparent 25%),
-    #050507;
-}
-
-.orb{
+.glow{
   position:absolute;
-  width:min(76vw,700px);
-  aspect-ratio:1;
+  width:55vw;
+  height:55vw;
+  max-width:600px;
+  max-height:600px;
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.065);
-  box-shadow:
-    0 0 140px rgba(145,93,230,.08),
-    inset 0 0 100px rgba(255,255,255,.025);
-  animation:orb 11s ease-in-out infinite;
+  filter:blur(80px);
+  opacity:.16;
+  background:#7865ff;
 }
 
-.orb:before,
-.orb:after{
+.glow.one{
+  top:-25%;
+  left:-15%;
+}
+
+.glow.two{
+  right:-20%;
+  bottom:-25%;
+  background:#4cc9ff;
+}
+
+.content{
+  position:relative;
+  width:min(940px,100%);
+  text-align:center;
+  z-index:2;
+}
+
+.eyebrow{
+  color:#aaa5c7;
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-size:11px;
+  margin-bottom:18px;
+}
+
+h1{
+  margin:0;
+  font-size:clamp(48px,12vw,112px);
+  line-height:.95;
+  letter-spacing:-.055em;
+  font-weight:700;
+}
+
+h2{
+  margin:0 0 18px;
+  font-size:clamp(32px,6vw,64px);
+  line-height:1;
+  letter-spacing:-.045em;
+}
+
+p{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.75;
+  max-width:650px;
+  margin:16px auto;
+}
+
+.small{
+  font-size:12px;
+  letter-spacing:.05em;
+}
+
+.btn{
+  margin-top:24px;
+  padding:13px 19px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  color:white;
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(15px);
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.25);
+}
+
+.btn.primary{
+  background:white;
+  color:#090a12;
+  border-color:white;
+  font-weight:600;
+}
+
+.hero-date{
+  margin-top:26px;
+  color:#777b98;
+  font-size:12px;
+  letter-spacing:.28em;
+}
+
+/* WORLD */
+
+.world-grid{
+  margin:35px auto 0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  max-width:900px;
+}
+
+.card{
+  position:relative;
+  min-height:230px;
+  overflow:hidden;
+  border-radius:var(--radius);
+  border:1px solid var(--line);
+  background:var(--glass);
+  cursor:pointer;
+  text-align:left;
+  transition:.35s ease;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(255,255,255,.24);
+}
+
+.card img{
+  width:100%;
+  height:100%;
+  min-height:230px;
+  object-fit:cover;
+  display:block;
+  transition:.6s ease;
+}
+
+.card:hover img{
+  transform:scale(1.05);
+}
+
+.card::after{
   content:"";
   position:absolute;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.045);
+  inset:0;
+  background:linear-gradient(to top,rgba(3,4,10,.9),transparent 65%);
 }
 
-.orb:before{inset:12%}
-.orb:after{inset:28%}
-
-@keyframes orb{
-  0%,100%{transform:scale(.96) rotate(0)}
-  50%{transform:scale(1.04) rotate(8deg)}
-}
-
-.openingText{
-  position:relative;
-}
-
-.hello{
-  opacity:0;
-  animation:rise 1.2s .25s var(--ease) forwards;
-}
-
-.martina{
-  opacity:0;
-  background:linear-gradient(
-    110deg,
-    #fff 20%,
-    #d1c0ef 50%,
-    #fff 80%
-  );
-  background-size:200% auto;
-  -webkit-background-clip:text;
-  color:transparent;
-  animation:
-    rise 1.4s .7s var(--ease) forwards,
-    shine 8s 2s linear infinite;
-}
-
-@keyframes shine{
-  to{background-position:200% center}
-}
-
-.subtitle{
-  opacity:0;
-  animation:rise 1s 1.55s var(--ease) forwards;
-}
-
-.enter{
-  opacity:0;
-  animation:rise 1s 2s var(--ease) forwards;
-}
-
-@keyframes rise{
-  from{
-    opacity:0;
-    transform:translateY(30px);
-    filter:blur(8px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-    filter:blur(0);
-  }
-}
-
-.scrollHint{
+.card-info{
   position:absolute;
-  bottom:25px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:8px;
-  letter-spacing:.32em;
-  text-transform:uppercase;
-  color:#67646b;
+  z-index:2;
+  left:18px;
+  right:18px;
+  bottom:16px;
 }
 
-.scrollHint i{
+.card-title{
+  font-size:18px;
+  font-weight:600;
+}
+
+.card-sub{
+  margin-top:4px;
+  color:#b5b8c9;
+  font-size:12px;
+}
+
+/* AQUARIUM */
+
+.aquarium{
+  width:min(760px,100%);
+  margin:28px auto;
+  border:1px solid var(--line);
+  border-radius:32px;
+  overflow:hidden;
+  background:rgba(255,255,255,.045);
+}
+
+.aquarium img{
+  width:100%;
+  height:min(52vw,430px);
+  min-height:250px;
+  object-fit:cover;
   display:block;
-  width:1px;
-  height:32px;
-  margin:11px auto 0;
-  background:linear-gradient(#777,transparent);
 }
 
-/* =====================
-   WORLD
-===================== */
-
-#world{
-  background:
-    radial-gradient(circle at 50% 15%,rgba(142,99,214,.08),transparent 30%);
+.aquarium-info{
+  padding:20px;
+  text-align:left;
 }
+
+.aquarium-info h3{
+  margin:0;
+  font-size:22px;
+}
+
+.aquarium-info p{
+  margin:8px 0 0;
+  font-size:14px;
+}
+
+/* MEMORY */
+
+.memory-box{
+  width:min(650px,100%);
+  margin:30px auto;
+  padding:32px;
+  border:1px solid var(--line);
+  background:var(--glass);
+  border-radius:32px;
+  backdrop-filter:blur(20px);
+}
+
+.quote{
+  font-size:clamp(22px,5vw,38px);
+  line-height:1.35;
+  letter-spacing:-.025em;
+}
+
+.memory-status{
+  margin-top:20px;
+  color:#8e92ab;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+
+/* WORDS */
+
+.words{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin:30px auto;
+  max-width:600px;
+}
+
+.word{
+  padding:11px 17px;
+  border:1px solid var(--line);
+  background:var(--glass);
+  border-radius:999px;
+  color:#ddd9f3;
+}
+
+/* STARS */
 
 .starfield{
   position:absolute;
@@ -327,499 +340,113 @@ p{
   width:2px;
   height:2px;
   border-radius:50%;
-  background:#fff;
-  opacity:.2;
-  animation:twinkle var(--d) ease-in-out infinite;
+  background:white;
+  opacity:.6;
+  animation:twinkle 3s infinite ease-in-out;
 }
 
 @keyframes twinkle{
-  50%{
-    opacity:.9;
-    transform:scale(1.8);
-  }
+  50%{opacity:.12;transform:scale(.5)}
 }
 
-.worldTitle em{
-  color:#d2c3e6;
-}
-
-.animalGrid{
-  width:min(930px,100%);
-  margin:42px auto 0;
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:11px;
-}
-
-.animal{
-  height:215px;
+.constellation{
   position:relative;
-  overflow:hidden;
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:var(--glass);
-  cursor:pointer;
-  text-align:left;
-  transition:.55s var(--ease);
+  width:min(700px,90vw);
+  height:330px;
+  margin:30px auto;
 }
 
-.animal:nth-child(1){
-  grid-column:span 6;
-}
-
-.animal:nth-child(2),
-.animal:nth-child(3){
-  grid-column:span 3;
-}
-
-.animal:nth-child(4),
-.animal:nth-child(5),
-.animal:nth-child(6){
-  grid-column:span 4;
-}
-
-.animal:hover{
-  transform:translateY(-8px);
-  border-color:rgba(255,255,255,.28);
-}
-
-.animal img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  opacity:.52;
-  transition:.7s var(--ease);
-}
-
-.animal:hover img{
-  opacity:.72;
-  transform:scale(1.08);
-}
-
-.icon{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  font-size:52px;
-}
-
-.label{
-  position:absolute;
-  z-index:2;
-  left:17px;
-  bottom:15px;
-  font-size:10px;
-  letter-spacing:.2em;
-  text-transform:uppercase;
-}
-
-.label small{
-  display:block;
-  color:#85818a;
-  margin-top:5px;
-  letter-spacing:.06em;
-  text-transform:none;
-}
-
-@media(max-width:650px){
-
-  .animalGrid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .animal,
-  .animal:nth-child(n){
-    grid-column:span 1;
-    height:150px;
-  }
-
-  .animal:nth-child(1){
-    grid-column:span 2;
-    height:205px;
-  }
-
-  .icon{font-size:40px}
-}
-
-/* =====================
-   HAHLoul
-===================== */
-
-#hahloul{
-  background:
-    radial-gradient(circle at 50% 45%,rgba(255,163,209,.09),transparent 31%);
-}
-
-.hahloulLayout{
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  align-items:center;
-  gap:60px;
-  text-align:left;
-}
-
-.hahloulPhoto{
-  position:relative;
-}
-
-.hahloulPhoto img{
-  display:block;
-  width:100%;
-  max-height:66vh;
-  object-fit:cover;
-  border-radius:25px;
-  border:1px solid var(--line);
-  box-shadow:0 40px 110px rgba(0,0,0,.52);
-}
-
-.hahloulPhoto:after{
-  content:"";
-  position:absolute;
-  inset:12px;
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:19px;
-  pointer-events:none;
-}
-
-.hahloulCopy{
-  text-align:left;
-}
-
-.hahloulCopy p{
-  margin-left:0;
-}
-
-@media(max-width:700px){
-
-  .hahloulLayout{
-    grid-template-columns:1fr;
-    gap:28px;
-  }
-
-  .hahloulCopy{
-    text-align:center;
-  }
-
-  .hahloulCopy p{
-    margin-left:auto;
-  }
-
-  .hahloulPhoto img{
-    max-height:42vh;
-  }
-}
-
-/* =====================
-   MEMORY
-===================== */
-
-.memoryCard{
-  width:min(720px,100%);
-  margin:43px auto 0;
-  padding:44px 28px;
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,.065),
-      rgba(255,255,255,.018)
-    );
-  backdrop-filter:blur(25px);
-  box-shadow:0 40px 100px rgba(0,0,0,.3);
-}
-
-.disc{
-  width:82px;
-  height:82px;
-  margin:0 auto 27px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.16);
-  display:grid;
-  place-items:center;
-  position:relative;
-}
-
-.disc:before{
-  content:"";
-  position:absolute;
-  inset:-14px;
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:50%;
-}
-
-.disc.playing{
-  animation:spin 5s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-.quote{
-  font-family:"Playfair Display",serif;
-  font-size:clamp(27px,5vw,48px);
-  font-style:italic;
-}
-
-/* =====================
-   WORDS
-===================== */
-
-.words{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:9px;
-  margin:38px 0;
-}
-
-.word{
-  padding:11px 18px;
-  border:1px solid var(--line);
-  border-radius:100px;
-  background:rgba(255,255,255,.035);
-  color:#d0cad5;
-  font-size:11px;
-}
-
-.counter{
-  font-family:"Playfair Display",serif;
-  font-size:clamp(80px,18vw,180px);
-  line-height:.8;
-  margin-top:42px;
-  background:linear-gradient(120deg,#fff,#bfa9e7,#fff);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.counter small{
-  display:block;
-  font:9px "DM Sans";
-  color:#747078;
-  letter-spacing:.3em;
-  text-transform:uppercase;
-  margin-top:18px;
-}
-
-/* =====================
-   MERGE
-===================== */
-
-#merge{
-  background:
-    radial-gradient(ellipse at 50% 90%,rgba(39,153,224,.25),transparent 34%),
-    radial-gradient(circle at 50% 5%,rgba(123,75,207,.2),transparent 30%),
-    #03050a;
-}
-
-.space{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-}
-
-.space:before,
-.space:after{
-  content:"";
-  position:absolute;
-  inset:-30%;
-  background-image:
-    radial-gradient(circle,rgba(255,255,255,.9) 0 1px,transparent 1.5px),
-    radial-gradient(circle,rgba(168,135,255,.7) 0 1px,transparent 1.5px);
-  background-size:82px 94px,137px 130px;
-  opacity:.25;
-  animation:drift 35s linear infinite;
-}
-
-.space:after{
-  transform:scale(1.4);
-  opacity:.11;
-  animation-duration:55s;
-}
-
-@keyframes drift{
-  to{
-    transform:translateY(-120px) rotate(3deg);
-  }
-}
-
-.ocean{
-  position:absolute;
-  left:50%;
-  bottom:-40%;
-  width:150%;
-  height:75%;
-  transform:translateX(-50%);
-  border-radius:50% 50% 0 0;
-  background:
-    radial-gradient(
-      ellipse at 50% 15%,
-      rgba(74,187,255,.25),
-      transparent 42%
-    ),
-    linear-gradient(to top,rgba(3,13,26,.95),transparent);
-  filter:blur(3px);
-}
-
-.mergeCopy{
-  transition:1.5s var(--ease);
-}
-
-.mergeCopy.lift{
-  transform:translateY(-30px) scale(1.025);
-}
-
-/* =====================
-   CONSTELLATION
-===================== */
-
-#constellation{
-  background:
-    radial-gradient(circle at 50% 40%,rgba(115,78,198,.15),transparent 32%),
-    #040408;
-}
-
-.const{
-  width:min(760px,100%);
-  height:390px;
-  position:relative;
-  margin:35px auto 0;
-}
-
-.dot{
+.const-dot{
   position:absolute;
   width:7px;
   height:7px;
-  margin:-3.5px;
+  background:white;
   border-radius:50%;
-  background:#fff;
-  box-shadow:
-    0 0 9px #fff,
-    0 0 26px #bba5ff,
-    0 0 50px rgba(187,165,255,.45);
-  animation:pulseStar 2.6s ease-in-out infinite;
+  box-shadow:0 0 18px 5px rgba(190,180,255,.5);
 }
 
-@keyframes pulseStar{
-  50%{
-    transform:scale(1.7);
-    opacity:.65;
-  }
-}
-
-.line{
+.const-line{
   position:absolute;
   height:1px;
   transform-origin:left center;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.5),
-      rgba(159,130,220,.06)
-    );
+  background:rgba(255,255,255,.3);
 }
 
-/* =====================
-   FINAL
-===================== */
-
-#final{
-  background:
-    radial-gradient(circle at 50% 35%,rgba(154,98,220,.15),transparent 30%),
-    #050307;
-}
-
-.finalStar{
-  font-size:76px;
-  animation:float 4s ease-in-out infinite;
-}
-
-@keyframes float{
-  50%{transform:translateY(-12px)}
-}
-
-.finalCard{
-  width:min(680px,100%);
-  margin:38px auto 0;
-  padding:35px 28px;
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:rgba(255,255,255,.04);
-  backdrop-filter:blur(22px);
-}
-
-/* =====================
-   MODAL
-===================== */
+/* MODAL */
 
 .modal{
   position:fixed;
   inset:0;
-  z-index:500;
+  z-index:200;
   display:grid;
   place-items:center;
-  padding:22px;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(18px);
+  padding:20px;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(12px);
   opacity:0;
-  visibility:hidden;
-  transition:.4s;
+  pointer-events:none;
+  transition:.3s ease;
 }
 
 .modal.show{
   opacity:1;
-  visibility:visible;
+  pointer-events:auto;
 }
 
-.modalBox{
-  width:min(520px,100%);
-  padding:35px;
+.modal-box{
+  width:min(500px,100%);
+  padding:30px;
   border:1px solid var(--line);
-  border-radius:25px;
-  background:rgba(14,13,18,.9);
+  border-radius:28px;
+  background:#111322;
   text-align:center;
-  transform:translateY(22px) scale(.96);
-  transition:.5s var(--ease);
 }
 
-.modal.show .modalBox{
-  transform:none;
+.modal-box h3{
+  font-size:28px;
+  margin:0 0 12px;
 }
 
-/* MOBILE */
+@media(max-width:700px){
+  .world-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 
-@media(max-width:650px){
+  .card{
+    min-height:190px;
+  }
 
-  .nav{
-    top:18px;
+  .card img{
+    min-height:190px;
   }
 
   .scene{
-    padding:84px 17px 38px;
+    padding:28px 16px;
   }
-
-  .memoryCard{
-    padding:35px 20px;
-  }
-
-  .const{
-    height:300px;
-  }
-
 }
 
-@media(max-width:390px){
-
-  .nav .date{
-    display:none;
+@media(max-width:430px){
+  .world-grid{
+    gap:10px;
   }
 
-  h1{
-    font-size:19vw;
+  .card{
+    min-height:165px;
+    border-radius:20px;
+  }
+
+  .card img{
+    min-height:165px;
+  }
+
+  .card-info{
+    left:13px;
+    right:13px;
+    bottom:12px;
+  }
+
+  .card-title{
+    font-size:15px;
   }
 }
 </style>
@@ -827,257 +454,176 @@ p{
 
 <body>
 
-<div class="progress">
-  <span id="bar"></span>
-</div>
+<div id="progress"></div>
+<div class="noise"></div>
 
-<div class="nav">
-  <strong>our little universe</strong>
-  <span class="date">23 · 06</span>
-</div>
+<!-- INTRO -->
+<section class="scene active" id="intro">
+  <div class="bg">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+  </div>
 
-
-<!-- OPENING -->
-
-<section class="scene active" id="opening">
-
-  <div class="orb"></div>
-
-  <div class="content openingText">
-
-    <div class="eyebrow hello">
-      a little something for you
-    </div>
-
-    <h1 class="martina">
-      HELLO,<br>
-      MARTINA.
-    </h1>
-
-    <p class="subtitle">
-      I made a small place for the tiny things
-      that somehow became impossible to forget.
+  <div class="content">
+    <div class="eyebrow">23 · 06</div>
+    <h1>Hello,<br>Martina.</h1>
+    <p>
+      I wanted to build a tiny place for the little things
+      that somehow became important.
     </p>
-
-    <button class="btn enter" onclick="go('world')">
-      enter slowly&nbsp;&nbsp;→
+    <div class="hero-date">OUR LITTLE UNIVERSE</div>
+    <button class="btn primary" onclick="go('world')">
+      enter the universe →
     </button>
-
   </div>
-
-  <div class="scrollHint">
-    take your time
-    <i></i>
-  </div>
-
 </section>
 
 
 <!-- WORLD -->
-
 <section class="scene" id="world">
-
-  <div class="starfield" id="starfield"></div>
+  <div class="bg">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+  </div>
 
   <div class="content">
-
-    <div class="eyebrow">
-      first, your world
-    </div>
-
-    <h2 class="worldTitle">
-      Before I show you mine,<br>
-      I wanted to remember <em>yours.</em>
-    </h2>
-
+    <div class="eyebrow">her world</div>
+    <h2>The little creatures.</h2>
     <p>
-      The little creatures, stories and strange details
-      that somehow say more than a biography ever could.
+      Some people collect things.
+      You somehow collected entire little worlds.
     </p>
 
-    <div class="animalGrid">
+    <div class="world-grid">
 
-      <div class="animal"
-           onclick="modal(
-           'Max 🐾',
-           'Some souls leave a forever-shaped place behind. Max is one of them.'
-           )">
-
+      <div class="card" onclick="openModal('Max 🐾','Some souls leave a forever-shaped place behind. Max is one of them.')">
         <img src="max.jpg" alt="Max">
-
-        <div class="label">
-          Max
-          <small>some souls stay</small>
+        <div class="card-info">
+          <div class="card-title">Max</div>
+          <div class="card-sub">one unforgettable soul</div>
         </div>
-
       </div>
 
-      <div class="animal"
-           onclick="modal(
-           'Miro 🐱',
-           'Persian. Cat sticker approved.'
-           )">
-
-        <div class="icon">🐱</div>
-        <div class="label">Miro</div>
-
+      <div class="card" onclick="openModal('Betta 🐟','A tiny world with an attitude of its own.')">
+        <img src="betta.jpg" alt="Betta fish">
+        <div class="card-info">
+          <div class="card-title">Betta</div>
+          <div class="card-sub">small · beautiful · dramatic</div>
+        </div>
       </div>
 
-      <div class="animal"
-           onclick="modal(
-           'Chika 🐱',
-           'Siamese. Also sticker approved.'
-           )">
-
-        <div class="icon">🐈</div>
-        <div class="label">Chika</div>
-
+      <div class="card" onclick="openModal('Flowerhorn 🐠','One of the characters from the aquatic department.')">
+        <img src="flowerhorn.jpg" alt="Flowerhorn fish">
+        <div class="card-info">
+          <div class="card-title">Flowerhorn</div>
+          <div class="card-sub">aquatic department</div>
+        </div>
       </div>
 
-      <div class="animal"
-           onclick="modal(
-           'Juliet 🐦',
-           'Australian budgie. Three Romeos did not survive the plot. 😂'
-           )">
-
-        <div class="icon">🐦</div>
-        <div class="label">Juliet</div>
-
+      <div class="card" onclick="openModal('Oscar I 🐟','Part of the aquarium universe.')">
+        <img src="oscar1.jpg" alt="Oscar fish">
+        <div class="card-info">
+          <div class="card-title">Oscar I</div>
+          <div class="card-sub">aquatic department</div>
+        </div>
       </div>
 
-      <div class="animal"
-           onclick="modal(
-           'Louza 🐢',
-           'Red-eared slider. Her own kingdom in the biggest tank.'
-           )">
-
-        <div class="icon">🐢</div>
-        <div class="label">Louza</div>
-
+      <div class="card" onclick="openModal('Oscar II 🐟','Another member of the collection.')">
+        <img src="oscar2.jpg" alt="Oscar fish">
+        <div class="card-info">
+          <div class="card-title">Oscar II</div>
+          <div class="card-sub">aquatic department</div>
+        </div>
       </div>
 
-      <div class="animal"
-           onclick="modal(
-           'The aquatic department 🐠',
-           'Oscars, Abu El-Ros, Blue Power, Fighter… and a collection that can always grow. 😂'
-           )">
-
-        <div class="icon">🐠</div>
-        <div class="label">the aquariums</div>
-
+      <div class="card" onclick="openModal('The aquarium 🫧','A little underwater universe that can always grow.')">
+        <img src="aquarium.jpg" alt="Aquarium">
+        <div class="card-info">
+          <div class="card-title">The Aquarium</div>
+          <div class="card-sub">a world of its own</div>
+        </div>
       </div>
 
     </div>
 
-    <button class="btn" onclick="go('hahloul')">
-      now, my world&nbsp;&nbsp;→
+    <button class="btn" onclick="go('aquarium')">
+      there's more →
     </button>
-
   </div>
 </section>
 
 
-<!-- HAHLoul -->
-
-<section class="scene" id="hahloul">
-
-  <div class="content hahloulLayout">
-
-    <div class="hahloulPhoto">
-
-      <img src="cat.jpg" alt="Hahloul">
-
-    </div>
-
-    <div class="hahloulCopy">
-
-      <div class="eyebrow">
-        someone from my world
-      </div>
-
-      <h2>Hahloul.</h2>
-
-      <p>
-        No stickers.<br>
-        No decorations.<br>
-        No explanation.
-      </p>
-
-      <p>
-        Just my cat.
-      </p>
-
-      <button class="btn" onclick="go('memory')">
-        there is a memory&nbsp;&nbsp;→
-      </button>
-
-    </div>
-
+<!-- AQUARIUM -->
+<section class="scene" id="aquarium">
+  <div class="bg">
+    <div class="glow two"></div>
   </div>
 
+  <div class="content">
+    <div class="eyebrow">the aquatic department</div>
+    <h2>A whole universe underwater.</h2>
+
+    <div class="aquarium">
+      <img src="aquarium.jpg" alt="Aquarium">
+      <div class="aquarium-info">
+        <h3>Where little worlds keep moving.</h3>
+        <p>
+          Oscars, Bettas, Flowerhorns and all the tiny characters
+          that somehow make a room feel alive.
+        </p>
+      </div>
+    </div>
+
+    <button class="btn" onclick="go('memory')">
+      one little memory →
+    </button>
+  </div>
 </section>
 
 
 <!-- MEMORY -->
-
 <section class="scene" id="memory">
+  <div class="bg">
+    <div class="glow one"></div>
+  </div>
 
   <div class="content">
+    <div class="eyebrow">one song · one memory</div>
+    <h2>There was a song…</h2>
 
-    <div class="eyebrow">
-      one song · one memory
-    </div>
-
-    <h2>There was a song.</h2>
-
-    <div class="memoryCard">
-
-      <div class="disc" id="disc">
-        ♪
-      </div>
-
-      <div class="quote">
-        “بتحب يا فمفوم؟ 😂”
-      </div>
+    <div class="memory-box">
+      <div class="quote">“بتحب يا فمفوم؟ 😂”</div>
 
       <p>
-        Every time I hear it,
-        my family asks me the same question.
+        Some memories don't need a long explanation.
+        Five seconds can be enough.
       </p>
 
-      <button class="btn" onclick="playY()">
-        play the memory&nbsp;&nbsp;▶
+      <button class="btn primary" id="memoryBtn" onclick="playMemory()">
+        ▶ play the memory
       </button>
 
-      <p style="font-size:10px;color:#666;margin-top:18px">
-        selected moment · 00:20 — 00:55
-      </p>
-
+      <div class="memory-status" id="memoryStatus">
+        selected moment · 00:20 — 00:25
+      </div>
     </div>
 
     <button class="btn" onclick="go('words')">
-      keep going&nbsp;&nbsp;→
+      keep going →
     </button>
-
   </div>
-
 </section>
 
 
 <!-- WORDS -->
-
 <section class="scene" id="words">
+  <div class="bg">
+    <div class="glow two"></div>
+  </div>
 
   <div class="content">
-
-    <div class="eyebrow">
-      our little dictionary
-    </div>
-
-    <h2>
-      Some words<br>
-      became ours.
-    </h2>
+    <div class="eyebrow">our little dictionary</div>
+    <h2>Some words became ours.</h2>
 
     <div class="words">
       <span class="word">ولا</span>
@@ -1085,48 +631,35 @@ p{
       <span class="word">ferly</span>
     </div>
 
-    <p>
-      And one sentence I never want to lose:
-    </p>
+    <p>And one sentence I never want to lose:</p>
 
-    <div class="quote" style="margin-top:25px">
-      “I wish they became 1000.”
+    <div class="memory-box">
+      <div class="quote">“I wish they became 1000.”</div>
     </div>
 
-    <button class="btn" onclick="count()">
-      let's see&nbsp;&nbsp;→
+    <button class="btn primary" onclick="startCount()">
+      let's see →
     </button>
 
     <div id="counter"
-         class="counter"
-         style="display:none">
-
+         style="display:none;font-size:60px;margin-top:25px;font-weight:700;">
       0
-
-      <small>
-        moments worth keeping
-      </small>
-
     </div>
 
+    <div id="counterText"
+         style="display:none;color:#969ab1;font-size:12px;">
+      moments worth keeping
+    </div>
   </div>
-
 </section>
 
 
 <!-- MERGE -->
-
 <section class="scene" id="merge">
+  <div class="starfield" id="stars"></div>
 
-  <div class="space"></div>
-
-  <div class="ocean"></div>
-
-  <div class="content mergeCopy" id="mergeCopy">
-
-    <div class="eyebrow">
-      your ocean · my universe
-    </div>
+  <div class="content">
+    <div class="eyebrow">your ocean · my universe</div>
 
     <h2 id="mergeTitle">
       You showed me your ocean.
@@ -1136,68 +669,48 @@ p{
       So I wanted to show you my sky.
     </p>
 
-    <p id="mergeSmall"
-       style="font-size:10px;color:#666">
-      wait for the music
+    <p class="small" id="mergeSmall">
+      wait for the music.
     </p>
 
-    <button id="canonBtn"
-            class="btn"
-            onclick="canon()">
-
-      begin the stars&nbsp;&nbsp;✦
-
+    <button class="btn primary" id="canonBtn" onclick="playCanon()">
+      begin the stars ✦
     </button>
-
   </div>
-
 </section>
 
 
 <!-- CONSTELLATION -->
-
 <section class="scene" id="constellation">
+  <div class="starfield" id="stars2"></div>
 
   <div class="content">
+    <div class="eyebrow">23 · 06</div>
+    <h2>A constellation for us.</h2>
 
-    <div class="eyebrow">
-      23 · 06
-    </div>
-
-    <h2>
-      A constellation<br>
-      for us.
-    </h2>
-
-    <div class="const" id="const"></div>
+    <div class="constellation" id="constellationBox"></div>
 
     <p>
       Different worlds.<br>
       One sky.
     </p>
 
-    <button class="btn" onclick="go('final')">
-      one last thing&nbsp;&nbsp;→
+    <button class="btn primary" onclick="go('final')">
+      one last thing →
     </button>
-
   </div>
-
 </section>
 
 
 <!-- FINAL -->
-
 <section class="scene" id="final">
+  <div class="bg">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+  </div>
 
   <div class="content">
-
-    <div class="finalStar">
-      ✦
-    </div>
-
-    <div class="eyebrow">
-      not a confession — not yet.
-    </div>
+    <div class="eyebrow">not a confession — not yet.</div>
 
     <h2>
       Some things are nicer<br>
@@ -1205,86 +718,54 @@ p{
     </h2>
 
     <p>
-      For now, this little universe is simply
-      a collection of the tiny things that made me smile.
+      For now, this little universe is just a collection
+      of the tiny things that made me smile.
     </p>
 
-    <div class="finalCard">
-
+    <div class="memory-box">
       <div class="quote">
         “I wish they became 1000.”
       </div>
 
       <p>
-        The words.<br>
-        The jokes.<br>
-        The songs.<br>
-        The stars.<br>
-        The little worlds we keep discovering.
+        The words. The jokes. The songs.
+        The stars. The little worlds we keep discovering.
       </p>
 
-      <button class="btn" onclick="end()">
-        keep this little universe&nbsp;&nbsp;✦
+      <button class="btn primary" onclick="finish()">
+        keep this little universe ✦
       </button>
-
     </div>
-
   </div>
-
 </section>
 
 
 <!-- MODAL -->
-
-<div class="modal"
-     id="modal"
-     onclick="hideModal(event)">
-
-  <div class="modalBox">
-
-    <div class="eyebrow">
-      a little detail
-    </div>
-
-    <h2 id="modalTitle"
-        style="font-size:42px">
-    </h2>
-
+<div class="modal" id="modal" onclick="modalOutside(event)">
+  <div class="modal-box">
+    <h3 id="modalTitle"></h3>
     <p id="modalText"></p>
-
-    <button class="btn"
-            onclick="closeModal()">
-      close
-    </button>
-
+    <button class="btn" onclick="closeModal()">close</button>
   </div>
-
 </div>
 
 
 <!-- AUDIO -->
-
-<audio id="y" preload="auto">
-  <source
-    src="yimken_habeit_memory.mp3"
-    type="audio/mpeg">
+<audio id="memoryAudio" preload="auto">
+  <source src="yimken_habeit_memory.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="c" preload="auto">
-  <source
-    src="canon_in_d_memory.mp3"
-    type="audio/mpeg">
+<audio id="canonAudio" preload="auto">
+  <source src="canon_in_d_memory.mp3" type="audio/mpeg">
 </audio>
 
 
 <script>
 
-/* NAVIGATION */
-
 const order=[
-  "opening",
+  "intro",
   "world",
-  "hahloul",
+  "aquarium",
   "memory",
   "words",
   "merge",
@@ -1292,269 +773,228 @@ const order=[
   "final"
 ];
 
+let current="intro";
+
 function go(id){
 
-  document
-    .querySelectorAll(".scene")
-    .forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".scene").forEach(scene=>{
+    scene.classList.remove("active");
+  });
 
-  const target=document.getElementById(id);
+  const next=document.getElementById(id);
 
-  if(!target)return;
+  if(next){
+    next.classList.add("active");
+    current=id;
 
-  target.classList.add("active");
+    const index=order.indexOf(id);
+    const percent=(index/(order.length-1))*100;
 
-  const index=order.indexOf(id);
+    document.getElementById("progress").style.width=percent+"%";
 
-  document.getElementById("bar").style.width=
-    (index/(order.length-1)*100)+"%";
-
-}
-
-
-/* STARS */
-
-const starfield=
-  document.getElementById("starfield");
-
-for(let i=0;i<100;i++){
-
-  const star=document.createElement("i");
-
-  star.className="star";
-
-  star.style.left=
-    Math.random()*100+"%";
-
-  star.style.top=
-    Math.random()*100+"%";
-
-  star.style.setProperty(
-    "--d",
-    2+Math.random()*5+"s"
-  );
-
-  star.style.animationDelay=
-    -Math.random()*5+"s";
-
-  starfield.appendChild(star);
+    window.scrollTo(0,0);
+  }
 }
 
 
 /* MODAL */
 
-function modal(title,text){
-
-  document.getElementById("modalTitle")
-    .textContent=title;
-
-  document.getElementById("modalText")
-    .textContent=text;
-
-  document.getElementById("modal")
-    .classList.add("show");
+function openModal(title,text){
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalText").textContent=text;
+  document.getElementById("modal").classList.add("show");
 }
 
 function closeModal(){
-
-  document.getElementById("modal")
-    .classList.remove("show");
+  document.getElementById("modal").classList.remove("show");
 }
 
-function hideModal(e){
-
+function modalOutside(e){
   if(e.target.id==="modal"){
     closeModal();
   }
 }
 
 
-/* MEMORY */
+/* MEMORY AUDIO
+   EXACTLY 20 → 25 SECONDS
+*/
 
-function playY(){
+const memoryAudio=document.getElementById("memoryAudio");
+const memoryBtn=document.getElementById("memoryBtn");
 
-  const audio=document.getElementById("y");
-  const disc=document.getElementById("disc");
+let memoryPlaying=false;
 
-  audio.currentTime=0;
+function playMemory(){
 
-  audio.play().then(()=>{
+  memoryAudio.pause();
 
-    disc.classList.add("playing");
+  memoryAudio.currentTime=20;
 
-  }).catch(()=>{});
-
-  audio.onended=()=>{
-    disc.classList.remove("playing");
-  };
-
+  memoryAudio.play().then(()=>{
+    memoryPlaying=true;
+    memoryBtn.textContent="■ playing memory";
+    document.getElementById("memoryStatus").textContent=
+      "playing · 00:20 — 00:25";
+  }).catch(()=>{
+    document.getElementById("memoryStatus").textContent=
+      "tap again to play the memory";
+  });
 }
+
+memoryAudio.addEventListener("timeupdate",()=>{
+
+  if(memoryPlaying && memoryAudio.currentTime>=25){
+
+    memoryAudio.pause();
+    memoryAudio.currentTime=20;
+    memoryPlaying=false;
+
+    memoryBtn.textContent="▶ play the memory";
+
+    document.getElementById("memoryStatus").textContent=
+      "selected moment · 00:20 — 00:25";
+  }
+
+});
 
 
 /* COUNTER */
 
-let counting=false;
+function startCount(){
 
-function count(){
+  const counter=document.getElementById("counter");
+  const text=document.getElementById("counterText");
 
-  if(counting)return;
-
-  counting=true;
-
-  const el=
-    document.getElementById("counter");
-
-  el.style.display="block";
+  counter.style.display="block";
+  text.style.display="block";
 
   let n=0;
 
   const timer=setInterval(()=>{
 
-    n+=Math.ceil((1000-n)/14);
+    n+=Math.ceil((1000-n)/12);
 
     if(n>1000)n=1000;
 
-    el.firstChild.textContent=n;
+    counter.textContent=n;
 
-    if(n===1000){
+    if(n>=1000){
 
       clearInterval(timer);
 
       setTimeout(()=>{
-
         go("merge");
-
-        counting=false;
-
-      },1100);
+      },800);
 
     }
 
-  },32);
-
+  },30);
 }
 
 
-/* OCEAN → SKY */
+/* STARS */
 
-let canonStarted=false;
+function createStars(container,count){
 
-function canon(){
+  for(let i=0;i<count;i++){
 
-  if(canonStarted)return;
+    const star=document.createElement("i");
 
-  canonStarted=true;
+    star.className="star";
 
-  const audio=
-    document.getElementById("c");
+    star.style.left=Math.random()*100+"%";
+    star.style.top=Math.random()*100+"%";
+    star.style.animationDelay=Math.random()*3+"s";
 
-  audio.currentTime=0;
+    container.appendChild(star);
+  }
+}
 
-  audio.play().catch(()=>{});
+createStars(document.getElementById("stars"),90);
+createStars(document.getElementById("stars2"),110);
 
-  const button=
-    document.getElementById("canonBtn");
 
-  button.disabled=true;
+/* CANON
+   LAST SONG — LEFT UNTOUCHED
+*/
 
-  button.textContent=
-    "watch the sky";
+const canonAudio=document.getElementById("canonAudio");
+
+function playCanon(){
+
+  const btn=document.getElementById("canonBtn");
+
+  btn.disabled=true;
+  btn.textContent="✦ the sky is opening…";
+
+  canonAudio.currentTime=0;
+
+  canonAudio.play().catch(()=>{});
 
   setTimeout(()=>{
 
-    document
-      .getElementById("mergeCopy")
-      .classList.add("lift");
-
-    document
-      .getElementById("mergeTitle")
-      .textContent=
+    document.getElementById("mergeTitle").textContent=
       "Your ocean became my sky.";
 
-    document
-      .getElementById("mergeText")
-      .textContent=
+    document.getElementById("mergeText").textContent=
       "Two different worlds. Somehow, they met.";
 
-    document
-      .getElementById("mergeSmall")
-      .textContent=
-      "and then the stars appeared.";
+    document.getElementById("mergeSmall").textContent=
+      "And then the stars appeared.";
 
-  },7000);
+  },3500);
 
   setTimeout(()=>{
-
     go("constellation");
-
-    canonStarted=false;
-
-  },28500);
+  },18000);
 
 }
 
 
 /* CONSTELLATION */
 
-const constellation=
-  document.getElementById("const");
-
 const points=[
-  [18,58],
-  [31,38],
-  [48,54],
-  [63,28],
-  [79,47],
-  [58,77]
+  [14,62],
+  [29,37],
+  [47,53],
+  [63,25],
+  [82,45],
+  [66,72],
+  [45,64]
 ];
+
+const box=document.getElementById("constellationBox");
 
 points.forEach((p,i)=>{
 
-  const dot=
-    document.createElement("i");
+  const dot=document.createElement("i");
 
-  dot.className="dot";
+  dot.className="const-dot";
+  dot.style.left=p[0]+"%";
+  dot.style.top=p[1]+"%";
 
-  dot.style.left=
-    p[0]+"%";
-
-  dot.style.top=
-    p[1]+"%";
-
-  dot.style.animationDelay=
-    i*.2+"s";
-
-  constellation.appendChild(dot);
+  box.appendChild(dot);
 
   if(i>0){
 
-    const previous=
-      points[i-1];
+    const previous=points[i-1];
 
-    const dx=
-      p[0]-previous[0];
+    const dx=p[0]-previous[0];
+    const dy=p[1]-previous[1];
 
-    const dy=
-      p[1]-previous[1];
+    const line=document.createElement("i");
 
-    const line=
-      document.createElement("i");
+    line.className="const-line";
 
-    line.className="line";
-
-    line.style.left=
-      previous[0]+"%";
-
-    line.style.top=
-      previous[1]+"%";
-
-    line.style.width=
-      Math.hypot(dx,dy)+"%";
+    line.style.left=previous[0]+"%";
+    line.style.top=previous[1]+"%";
+    line.style.width=Math.hypot(dx,dy)+"%";
 
     line.style.transform=
       `rotate(${Math.atan2(dy,dx)}rad)`;
 
-    constellation.appendChild(line);
+    box.appendChild(line);
   }
 
 });
@@ -1562,69 +1002,65 @@ points.forEach((p,i)=>{
 
 /* END */
 
-function end(){
+function finish(){
 
   document.body.innerHTML=`
 
-  <div style="
-    position:fixed;
-    inset:0;
-    display:grid;
-    place-items:center;
-    text-align:center;
-    padding:25px;
-    background:
+    <div style="
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      padding:30px;
+      background:
       radial-gradient(
-        circle at 50% 42%,
-        #241735,
-        #050507 70%
+        circle at 50% 40%,
+        #24183e 0%,
+        #080812 55%,
+        #05050a 100%
       );
-    color:white;
-  ">
+      color:white;
+      font-family:system-ui;
+    ">
 
-    <div>
+      <div>
 
-      <div style="
-        font-size:82px;
-        animation:float 4s ease-in-out infinite;
-      ">
-        ✦
+        <div style="
+          color:#aaa3c9;
+          font-size:11px;
+          letter-spacing:.3em;
+          margin-bottom:20px;
+        ">
+          23 · 06
+        </div>
+
+        <div style="
+          font-size:80px;
+          margin-bottom:15px;
+        ">
+          ✦
+        </div>
+
+        <h1 style="
+          font-size:clamp(38px,9vw,70px);
+          margin:0;
+          letter-spacing:-.05em;
+        ">
+          To be continued.
+        </h1>
+
+        <p style="
+          color:#a7aabd;
+          line-height:1.8;
+          margin-top:18px;
+        ">
+          Some stories deserve another chapter.
+        </p>
+
       </div>
-
-      <div style="
-        margin-top:25px;
-        font-size:9px;
-        letter-spacing:.35em;
-        color:#89848e;
-        text-transform:uppercase;
-      ">
-        23 · 06
-      </div>
-
-      <h2 style="
-        font-family:'Playfair Display',serif;
-        font-weight:400;
-        font-size:clamp(45px,10vw,85px);
-        letter-spacing:-.05em;
-        margin-top:18px;
-      ">
-        To be continued.
-      </h2>
-
-      <p style="
-        color:#96919b;
-        margin-top:20px;
-        line-height:1.8;
-      ">
-        Some stories deserve another chapter.
-      </p>
 
     </div>
-
-  </div>
-
   `;
-
 }
 
 </script>
