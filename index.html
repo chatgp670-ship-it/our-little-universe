@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#03050c">
+<title>23·06 — Our Little Universe</title>
+<style>
+:root{--bg:#03050c;--ink:#f8f9ff;--muted:#aab6ca;--ice:#c7e6ff;--line:#ffffff19;--glass:#ffffff08}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--ink)}
+body{font-family:Georgia,"Times New Roman",serif;touch-action:manipulation}
+button{font:inherit}.scene{position:fixed;inset:0;display:grid;place-items:center;padding:24px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 1s cubic-bezier(.2,.8,.2,1);overflow:hidden}.scene.active{opacity:1;visibility:visible;pointer-events:auto}
+.content{position:relative;z-index:20;width:min(920px,100%);text-align:center}.kicker{font:700 10px Arial,sans-serif;letter-spacing:.34em;text-transform:uppercase;color:#a8d7ff;margin-bottom:17px}
+h1{font-size:clamp(58px,15vw,150px);line-height:.86;letter-spacing:-.065em;font-weight:400;margin:0 0 24px}h2{font-size:clamp(36px,7vw,78px);line-height:1;letter-spacing:-.045em;font-weight:400;margin:0 0 22px}p{max-width:740px;margin:10px auto;color:var(--muted);font-size:clamp(16px,2.7vw,22px);line-height:1.65}
+.small{font:12px Arial,sans-serif;color:#708098}.btn{margin-top:25px;border:1px solid #ffffff27;background:#ffffff09;border-radius:999px;color:#fff;padding:13px 23px;cursor:pointer;transition:.35s}.btn:hover{background:#ffffff17;transform:translateY(-2px)}.btn:disabled{opacity:.25;cursor:default}
+.progress{position:fixed;z-index:100;left:18px;right:18px;bottom:15px;height:2px;background:#ffffff0d}.progress i{display:block;width:0;height:100%;background:#c6e7ff;transition:1s}
+#opening{background:radial-gradient(circle at 50% 43%,#142a43,#050711 62%,#010208)}
+.openingStars{position:absolute;inset:0;background-image:radial-gradient(circle,#fff 1px,transparent 1.7px);background-size:77px 77px;opacity:.24;animation:stars 24s linear infinite}@keyframes stars{to{background-position:0 -500px}}
+.search{width:min(650px,92vw);margin:28px auto 0;padding:18px 20px;text-align:left;border:1px solid #ffffff1c;border-radius:16px;background:#ffffff06;font:14px Arial;color:#8291a8}.search b{font-weight:400;color:#fff}.cursor{display:inline-block;width:6px;height:15px;background:#c3e5ff;vertical-align:-2px;margin-left:4px;animation:blink 1s infinite}@keyframes blink{50%{opacity:0}}
+#world{background:radial-gradient(circle at 50% 115%,#0f667f,#071927 57%,#02050c)}
+.water{position:absolute;inset:-35%;background:radial-gradient(circle,#ffffff18 0 1px,transparent 1.8px);background-size:100px 130px;animation:water 17s linear infinite;opacity:.7}@keyframes water{to{transform:translateY(-150px)}}
+.fish{position:absolute;font-size:50px;opacity:.35;animation:swim 14s linear infinite}.f1{top:16%;left:-10%}.f2{top:64%;left:-20%;animation-delay:3s}.f3{top:38%;left:-15%;animation-delay:6s}@keyframes swim{to{left:110%;transform:translateY(-40px)}}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;max-width:820px;margin:25px auto}.card{min-height:145px;border:1px solid var(--line);border-radius:21px;background:#ffffff08;overflow:hidden;position:relative;cursor:pointer;transition:.35s}.card:hover{transform:translateY(-5px);background:#ffffff0e}.card img{width:100%;height:112px;object-fit:cover}.icon{height:112px;display:grid;place-items:center;font-size:53px}.card span{display:block;padding:9px;font:11px Arial;color:#cbd7e7}.sticker{position:absolute;right:7px;top:6px;font-size:24px;filter:drop-shadow(0 4px 5px #000)}
+#hahloul{background:radial-gradient(circle at 50% 42%,#192437,#050711 72%)}.hero{width:min(370px,84vw);height:360px;object-fit:cover;border-radius:30px;border:1px solid var(--line);box-shadow:0 30px 100px #0009}
+#memory{background:radial-gradient(circle at 50% 45%,#2b1730,#07060d 73%)}.glass{border:1px solid var(--line);background:linear-gradient(145deg,#ffffff0e,#ffffff04);border-radius:28px;padding:28px;backdrop-filter:blur(16px);box-shadow:0 30px 100px #0008}.quote{font-size:clamp(29px,6vw,58px);line-height:1.1;margin:18px 0}
+#words{background:radial-gradient(circle at 50% 45%,#102538,#050711 70%)}.wordList{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:27px}.word{padding:12px 17px;border-radius:18px;border:1px solid var(--line);background:#ffffff07;font-style:italic}.counter{font-size:clamp(76px,18vw,175px);line-height:1;margin-top:18px}.counter small{display:block;font:11px Arial;color:#718096;letter-spacing:.2em;text-transform:uppercase}
+#merge{background:linear-gradient(#071a2b,#030611)}.horizon{position:absolute;left:-10%;right:-10%;bottom:-25%;height:68%;background:radial-gradient(ellipse at 50% 100%,#1a719455,transparent 61%);transition:2.5s}.starsLayer{position:absolute;inset:0;opacity:0;background-image:radial-gradient(circle,#fff 1px,transparent 1.7px);background-size:73px 73px;animation:starDrift 20s linear infinite;transition:2.7s}@keyframes starDrift{to{background-position:0 -420px}}
+.mergeCore{transition:1.8s}.mergeCore.lift{transform:scale(1.04);filter:brightness(1.17)}.mergeCore.lift~.starsLayer{opacity:1}.mergeCore.lift~.horizon{opacity:.13;transform:translateY(70px)}
+#constellation{background:#02040a}.sky{position:absolute;inset:0;background-image:radial-gradient(circle,#fff 1px,transparent 1.7px);background-size:69px 69px;opacity:.75}.const{width:min(680px,92vw);height:330px;margin:10px auto;position:relative}.dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 20px 5px #c3e6ff}.line{position:absolute;height:1px;background:#bde2ff8c;transform-origin:left}
+#final{background:radial-gradient(circle at 50% 43%,#2a1742,#05030b 72%)}.fade{opacity:0;transform:translateY(18px);animation:appear 1.4s forwards}.d1{animation-delay:.4s}.d2{animation-delay:1.6s}.d3{animation-delay:3s}.d4{animation-delay:4.3s}@keyframes appear{to{opacity:1;transform:none}}
+.modal{position:fixed;inset:0;z-index:300;background:#000d;display:none;place-items:center;padding:20px}.modal.show{display:grid}.modal .glass{width:min(620px,100%);text-align:center}
+.secret{position:fixed;z-index:50;right:17px;top:15px;width:34px;height:34px;border-radius:50%;border:1px solid #ffffff12;background:#ffffff03;color:#ffffff35;cursor:pointer}.secret:hover{color:#fff}
+@media(max-width:650px){.cards{grid-template-columns:repeat(2,1fr)}.card{min-height:132px}.card img,.icon{height:100px}.hero{height:300px}}
+</style>
+</head>
+<body>
+<div class="progress"><i id="bar"></i></div>
+<button class="secret" aria-label="secret" onclick="secret()">·</button>
+
+<section class="scene active" id="opening">
+<div class="openingStars"></div>
+<div class="content">
+<div class="kicker">a very ordinary beginning</div>
+<h1>23·06</h1>
+<p>Before there was a story, there was a question.</p>
+<div class="search">searching: <b>celecoxib</b><span class="cursor"></span></div>
+<p class="small">An ordinary question. An extraordinary beginning.</p>
+<button class="btn" onclick="go('world')">keep looking →</button>
+</div>
+</section>
+
+<section class="scene" id="world">
+<div class="water"></div><div class="fish f1">🐠</div><div class="fish f2">🐟</div><div class="fish f3">🪼</div>
+<div class="content">
+<div class="kicker">her world</div>
+<h2>I wanted to know the little things.</h2>
+<p>Because sometimes you understand someone by the creatures they love.</p>
+<div class="cards">
+<div class="card" onclick="modal('Max 🐾','Some souls leave a forever-shaped place behind. Max is one of them.')"><img src="max.jpg"><span>Max</span></div>
+<div class="card" onclick="modal('Miro 🐱','Persian. Cat sticker approved.')"><div class="icon">🐱</div><i class="sticker">🐾</i><span>Miro</span></div>
+<div class="card" onclick="modal('Chika 🐱','Siamese. Also sticker approved.')"><div class="icon">🐈</div><i class="sticker">😺</i><span>Chika</span></div>
+<div class="card" onclick="modal('Juliet 🐦','Australian budgie. Three Romeos did not survive the plot. 😂')"><div class="icon">🐦</div><span>Juliet</span></div>
+<div class="card" onclick="modal('Louza 🐢','Red-eared slider. Her own kingdom in the biggest tank.')"><div class="icon">🐢</div><span>Louza</span></div>
+<div class="card" onclick="modal('The aquatic department 🐠','Oscars, Abu El-Ros, Blue Power, Fighter… and a collection that can always grow. 😂')"><div class="icon">🐠</div><span>The aquariums</span></div>
+</div>
+<p class="small">And the hamster experiments remain officially classified as 🤡.</p>
+<button class="btn" onclick="go('hahloul')">now, meet someone from my world →</button>
+</div>
+</section>
+
+<section class="scene" id="hahloul">
+<div class="content">
+<div class="kicker">my world</div><h2>Hahloul.</h2>
+<img class="hero" src="cat.jpg">
+<p>My cat. No stickers. No decorations. Just Hahloul. 😌</p>
+<button class="btn" onclick="go('memory')">there's a memory I kept →</button>
+</div>
+</section>
+
+<section class="scene" id="memory">
+<div class="content">
+<div class="kicker">one song · one memory</div><h2>There was a song…</h2>
+<div class="glass"><div class="quote">“بتحب يا فمفوم؟ 😂”</div><p>Every time I hear it, my family asks me the same question.</p>
+<button class="btn" onclick="playY()">▶ play the memory</button><p class="small">selected moment · 00:20 — 00:55</p></div>
+<button class="btn" onclick="go('words')">keep going →</button>
+</div>
+</section>
+
+<section class="scene" id="words">
+<div class="content">
+<div class="kicker">our little dictionary</div><h2>Some words became ours.</h2>
+<div class="wordList"><span class="word">ولا</span><span class="word">dearly</span><span class="word">ferly</span></div>
+<p>And one sentence I never want to lose:</p><div class="quote">“I wish they became 1000.”</div>
+<button class="btn" onclick="count()">let's see →</button><div id="counter" class="counter" style="display:none">0<small>moments worth keeping</small></div>
+</div>
+</section>
+
+<section class="scene" id="merge">
+<div class="starsLayer"></div><div class="horizon"></div>
+<div class="content mergeCore">
+<div class="kicker">your ocean · my universe</div><h2 id="mt">You showed me your ocean.</h2><p id="mx">So I wanted to show you my sky.</p><p id="rise" class="small">wait for the music.</p>
+<button id="canonBtn" class="btn" onclick="canon()">begin the stars ✦</button>
+</div>
+</section>
+
+<section class="scene" id="constellation">
+<div class="sky"></div><div class="content">
+<div class="kicker">23·06</div><h2>A constellation for us.</h2>
+<div class="const" id="const"></div><p>Different worlds. One sky.</p>
+<button class="btn" onclick="go('final')">one last thing →</button>
+</div>
+</section>
+
+<section class="scene" id="final">
+<div class="content">
+<div class="kicker fade d1">not a confession — not yet.</div>
+<h2 class="fade d2">Some things are nicer<br>when they take their time.</h2>
+<p class="fade d3">For now, this little universe is just a collection of the tiny things that made me smile.</p>
+<div class="glass fade d4"><div class="quote">“I wish they became 1000.”</div><p>The words. The jokes. The songs. The stars. The little worlds we keep discovering.</p><button class="btn" onclick="end()">keep this little universe ✦</button></div>
+</div>
+</section>
+
+<div class="modal" id="modal" onclick="hide(event)"><div class="glass"><h2 id="modalTitle"></h2><p id="modalText"></p><button class="btn" onclick="closeModal()">close</button></div></div>
+<audio id="y" preload="auto"><source src="yimken_habeit_memory.mp3" type="audio/mpeg"></audio>
+<audio id="c" preload="auto"><source src="canon_in_d_memory.mp3" type="audio/mpeg"></audio>
+
+<script>
+const order=["opening","world","hahloul","memory","words","merge","constellation","final"];
+let current="opening";
+function go(id){document.querySelectorAll(".scene").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");current=id;document.getElementById("bar").style.width=(order.indexOf(id)/(order.length-1)*100)+"%"}
+function modal(t,x){document.getElementById("modalTitle").textContent=t;document.getElementById("modalText").textContent=x;document.getElementById("modal").classList.add("show")}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+function hide(e){if(e.target.id==="modal")closeModal()}
+function playY(){const a=document.getElementById("y");a.currentTime=0;a.play().catch(()=>{})}
+function count(){const el=document.getElementById("counter");el.style.display="block";let n=0;const t=setInterval(()=>{n+=Math.ceil((1000-n)/13);if(n>1000)n=1000;el.firstChild.textContent=n;if(n===1000){clearInterval(t);setTimeout(()=>go("merge"),850)}},34)}
+function canon(){
+ const a=document.getElementById("c");a.currentTime=0;a.play().catch(()=>{});
+ document.getElementById("canonBtn").disabled=true;
+ // 1:57 is 7 seconds into the 1:50–2:20 clip.
+ setTimeout(()=>{document.querySelector(".mergeCore").classList.add("lift");document.getElementById("mt").textContent="Your ocean became my sky.";document.getElementById("mx").textContent="Two different worlds. Somehow, they met.";document.getElementById("rise").textContent="And then the stars appeared.";},7000);
+ setTimeout(()=>go("constellation"),28500)
+}
+const box=document.getElementById("const"),pts=[[18,58],[31,38],[48,54],[63,28],[79,47],[58,77]];
+pts.forEach((p,i)=>{let d=document.createElement("i");d.className="dot";d.style.left=p[0]+"%";d.style.top=p[1]+"%";box.appendChild(d);if(i){let q=pts[i-1],dx=p[0]-q[0],dy=p[1]-q[1],l=document.createElement("i");l.className="line";l.style.left=q[0]+"%";l.style.top=q[1]+"%";l.style.width=Math.hypot(dx,dy)+"%";l.style.transform=`rotate(${Math.atan2(dy,dx)}rad)`;box.appendChild(l)}})
+function secret(){modal("A tiny secret","If you found this, you were paying attention. ❤️")}
+function end(){document.body.innerHTML='<section class="scene active" style="background:radial-gradient(circle at 50% 42%,#2a1742,#05030b 72%)"><div class="content"><div class="kicker">23·06</div><h1>✦</h1><h2>To be continued.</h2><p>Some stories deserve another chapter.</p></div></section>'}
+</script>
+</body>
+</html>
